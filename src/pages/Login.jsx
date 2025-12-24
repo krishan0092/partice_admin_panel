@@ -10,8 +10,6 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-   
     if (email === "admin@gmail.com" && password === "123456") {
       login(email, password);
       navigate("/dashboard");
@@ -21,19 +19,19 @@ export default function Login() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
+    <div className="h-screen flex items-center justify-center bg-gray-100 font-sans">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-lg shadow-md w-96"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">
+        <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-center tracking-wide">
           Admin Login
         </h2>
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full mb-4 p-2 border rounded"
+          className="w-full mb-4 p-3 border rounded-md text-gray-800 font-sans focus:outline-none focus:ring-2 focus:ring-indigo-500"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -41,12 +39,12 @@ export default function Login() {
         <input
           type="password"
           placeholder="Password"
-          className="w-full mb-4 p-2 border rounded"
+          className="w-full mb-4 p-3 border rounded-md text-gray-800 font-sans focus:outline-none focus:ring-2 focus:ring-indigo-500"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        <button className="w-full bg-indigo-600 text-white py-2 rounded-md font-semibold hover:bg-indigo-700 transition">
           Login
         </button>
       </form>
