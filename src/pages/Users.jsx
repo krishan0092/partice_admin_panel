@@ -4,9 +4,11 @@ import { getUsers } from "../services/api";
 import { FaUserPlus, FaUsers, FaUserCheck, FaEdit } from "react-icons/fa";
 import EditUserModal from "../components/EditUserModal";
 import AddUserModal from "../components/AddUserModal";
-
+import { useTheme } from "../context/ThemeContext";
 
 export default function Users() {
+  const { theme } = useTheme();
+
   const [users, setUsers] = useState(getUsers());
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -21,6 +23,7 @@ export default function Users() {
     setUsers(users.map((u) => (u.id === user.id ? user : u)));
     setShowEdit(false);
   };
+
   const statusStyles = {
     Active: "bg-green-100 text-green-600",
     Inactive: "bg-red-100 text-red-600",
@@ -32,49 +35,53 @@ export default function Users() {
 
   return (
     <Layout>
-      <div className="bg-gray-100 min-h-screen p-6 font-sans">
+      <div
+        className={`min-h-screen p-6 font-sans transition-colors ${
+          theme === "dark"
+            ? "bg-gray-900 text-gray-100"
+            : "bg-gray-100 text-gray-800"
+        }`}
+      >
+        <div className="mb-8">
+          <div className="rounded-xl p-6 text-white flex justify-between items-center shadow bg-gradient-to-r from-indigo-600 to-purple-600">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-semibold tracking-wide">
+                Users
+              </h1>
+              <p className="text-indigo-100 text-sm mt-1">
+                Manage application users
+              </p>
+            </div>
 
-<div className="mb-8">
-  <div
-    className="rounded-xl p-6 text-white flex justify-between items-center shadow
-    bg-gradient-to-r from-indigo-600 to-purple-600"
-  >
-    <div>
-      <h1 className="text-2xl md:text-3xl font-semibold tracking-wide">
-        Users
-      </h1>
-      <p className="text-indigo-100 text-sm mt-1">
-        Manage application users
-      </p>
-    </div>
-
-    <button
-      onClick={() => setShowAdd(true)}
-      className="bg-white text-indigo-600 px-5 py-2 rounded-md 
-      flex items-center gap-2 font-semibold
-      hover:bg-indigo-50 transition"
-    >
-      Add User
-    </button>
-  </div>
-</div>
-
-
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-          <StatCard title="Total Users" value={totalUsers} icon={<FaUsers />} />
-          <StatCard title="Active Users" value={activeUsers} icon={<FaUserCheck />} />
-          <StatCard title="New This Month" value="12" icon={<FaUserPlus />} />
+            <button
+              onClick={() => setShowAdd(true)}
+              className="bg-white text-indigo-600 px-5 py-2 rounded-md font-semibold hover:bg-indigo-50 transition"
+            >
+              Add User
+            </button>
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold tracking-wide">User List</h2>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+          <StatCard title="Total Users" value={totalUsers} icon={<FaUsers />} theme={theme} />
+          <StatCard title="Active Users" value={activeUsers} icon={<FaUserCheck />} theme={theme} />
+          <StatCard title="New This Month" value="12" icon={<FaUserPlus />} theme={theme} />
+        </div>
+
+        <div
+          className={`rounded-xl shadow p-6 ${
+            theme === "dark" ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"
+          }`}
+        >
+          <h2 className="text-lg font-semibold mb-4">User List</h2>
 
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-gray-500 border-b">
+              <tr
+                className={`border-b ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
                 <th className="py-3 text-left">Name</th>
                 <th className="text-left">Email</th>
                 <th className="text-left">Status</th>
@@ -84,31 +91,40 @@ export default function Users() {
 
             <tbody>
               {users.map((u) => (
-                <tr key={u.id} className="border-b hover:bg-gray-50">
-                  <td className="py-3 font-medium align-middle">{u.name}</td>
+                <tr
+                  key={u.id}
+                  className={`border-b ${
+                    theme === "dark"
+                      ? "hover:bg-gray-700"
+                      : "hover:bg-gray-50"
+                  }`}
+                >
+                  <td className="py-3 font-medium">{u.name}</td>
+                  <td
+                    className={`${
+                      theme === "dark" ? "text-gray-300" : "text-gray-600"
+                    }`}
+                  >
+                    {u.email}
+                  </td>
 
-                  <td className="align-middle">{u.email}</td>
-
-                  <td className="align-middle">
+                  <td>
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold tracking-wide ${statusStyles[u.status] || "bg-gray-100 text-gray-600"
-                        }`}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        statusStyles[u.status]
+                      }`}
                     >
                       {u.status}
                     </span>
                   </td>
 
-
-                  <td className="text-center align-middle">
+                  <td className="text-center">
                     <button
                       onClick={() => {
                         setSelectedUser(u);
                         setShowEdit(true);
                       }}
-                      className="inline-flex items-center justify-center p-2 rounded-full bg-indigo-50 text-indigo-600 
-                      transition-all duration-200 ease-out 
-                      hover:bg-indigo-100 hover:scale-125 hover:shadow-md"
-                      title="Edit User"
+                      className="p-2 rounded-full bg-indigo-100 text-indigo-600 hover:bg-indigo-200 transition"
                     >
                       <FaEdit />
                     </button>
@@ -116,15 +132,11 @@ export default function Users() {
                 </tr>
               ))}
             </tbody>
-
           </table>
         </div>
 
         {showAdd && (
-          <AddUserModal
-            onClose={() => setShowAdd(false)}
-            onSave={handleAddUser}
-          />
+          <AddUserModal onClose={() => setShowAdd(false)} onSave={handleAddUser} />
         )}
 
         {showEdit && (
@@ -139,10 +151,20 @@ export default function Users() {
   );
 }
 
-const StatCard = ({ title, value, icon }) => (
-  <div className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition font-sans">
+const StatCard = ({ title, value, icon, theme }) => (
+  <div
+    className={`p-6 rounded-xl shadow transition ${
+      theme === "dark" ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"
+    }`}
+  >
     <div className="flex justify-between items-center">
-      <p className="text-gray-500 text-sm uppercase tracking-wide">{title}</p>
+      <p
+        className={`text-sm uppercase tracking-wide ${
+          theme === "dark" ? "text-gray-400" : "text-gray-500"
+        }`}
+      >
+        {title}
+      </p>
       <span className="bg-indigo-100 text-indigo-600 p-3 rounded-full text-xl">
         {icon}
       </span>

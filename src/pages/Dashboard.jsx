@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import Layout from "../components/Layout";
 import {
   FaUsers,
@@ -12,6 +13,8 @@ import DashboardChart from "../components/DashboardChart";
 
 export default function Dashboard() {
   const { logout } = useAuth();
+  const { theme } = useTheme();
+
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -77,46 +80,44 @@ export default function Dashboard() {
     }, 1000);
   };
 
+  const isDark = theme === "dark";
+
   return (
     <Layout>
-      <div className="bg-gray-100 min-h-screen p-6 font-sans">
-
-     <div className="mb-8">
-  <div className="flex flex-col md:flex-row justify-between items-center
-    bg-gradient-to-r from-indigo-600 to-purple-600
-    text-white px-6 py-6 rounded-xl shadow">
-
-    <div>
-      <h1 className="text-2xl md:text-3xl font-semibold tracking-wide">
-        Dashboard
-      </h1>
-      <p className="text-indigo-100 text-sm mt-1">
-        Welcome back, Krish
-      </p>
-    </div>
-
-    <div className="flex gap-3 mt-4 md:mt-0">
-      <button
-        onClick={handleRefresh}
-        disabled={refreshing}
-        className="bg-white text-indigo-600 px-4 py-2 rounded-lg
-        flex items-center gap-2 hover:bg-indigo-50"
+      <div
+        className={`min-h-screen p-6 font-sans transition-colors ${isDark ? "bg-gray-900 text-gray-100" : "bg-gray-100 text-gray-800"
+          }`}
       >
-        <FaSyncAlt className={refreshing ? "animate-spin" : ""} />
-        Refresh
-      </button>
+        <div className="mb-8">
+          <div className="flex flex-col md:flex-row justify-between items-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-6 rounded-xl shadow">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-semibold tracking-wide">
+                Dashboard
+              </h1>
+              <p className="text-indigo-100 text-sm mt-1">
+                Welcome back, Krish
+              </p>
+            </div>
 
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600"
-      >
-        Logout
-      </button>
-    </div>
+            <div className="flex gap-3 mt-4 md:mt-0">
+              <button
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="bg-white text-indigo-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-indigo-50"
+              >
+                <FaSyncAlt className={refreshing ? "animate-spin" : ""} />
+                Refresh
+              </button>
 
-  </div>
-</div>
-
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-8">
           {stats.map((item, index) => (
@@ -131,6 +132,7 @@ export default function Dashboard() {
                     : item.value
               }
               icon={item.icon}
+              isDark={isDark}
             />
           ))}
         </div>
@@ -151,8 +153,14 @@ export default function Dashboard() {
           <ActionCard title="View Orders" subtitle="Orders" />
           <ActionCard title="Generate Report" subtitle="Report" />
         </div>
-        <div className="bg-white mt-10 p-6 rounded-xl shadow">
-          <h2 className="text-lg font-semibold mb-4 tracking-wide">Recent Orders</h2>
+
+        <div
+          className={`mt-10 p-6 rounded-xl shadow ${isDark ? "bg-gray-800" : "bg-white"
+            }`}
+        >
+          <h2 className="text-lg font-semibold mb-4 tracking-wide">
+            Recent Orders
+          </h2>
 
           <div className="flex flex-col md:flex-row gap-4 mb-4">
             <input
@@ -160,13 +168,19 @@ export default function Dashboard() {
               placeholder="Search by user..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="border px-3 py-2 rounded-lg w-full md:w-1/3"
+              className={`px-3 py-2 rounded-lg w-full md:w-1/3 outline-none ${isDark
+                  ? "bg-gray-700 border-gray-600 text-gray-100"
+                  : "bg-white border"
+                }`}
             />
 
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="border px-3 py-2 rounded-lg w-full md:w-1/4"
+              className={`px-3 py-2 rounded-lg w-full md:w-1/4 outline-none ${isDark
+                  ? "bg-gray-700 border-gray-600 text-gray-100"
+                  : "bg-white border"
+                }`}
             >
               <option value="All">All Status</option>
               <option value="Completed">Completed</option>
@@ -175,20 +189,23 @@ export default function Dashboard() {
             </select>
           </div>
 
-          <table className="w-full text-sm table-fixed">
+          <table className="w-full text-sm">
             <thead>
-              <tr className="text-gray-500 border-b">
-                <th className="py-3 px-2 text-left uppercase tracking-wide">Order ID</th>
-                <th className="py-3 px-2 text-left uppercase tracking-wide">User</th>
-                <th className="py-3 px-2 text-left uppercase tracking-wide">Status</th>
-                <th className="py-3 px-2 text-left uppercase tracking-wide">Amount</th>
+              <tr
+                className={`border-b ${isDark ? "text-gray-400" : "text-gray-500"
+                  }`}
+              >
+                <th className="py-3 text-left">Order ID</th>
+                <th className="text-left">User</th>
+                <th className="text-left">Status</th>
+                <th className="text-left">Amount</th>
               </tr>
             </thead>
 
             <tbody>
               {filteredOrders.length ? (
                 filteredOrders.map((order, index) => (
-                  <OrderRow key={index} {...order} />
+                  <OrderRow key={index} {...order} isDark={isDark} />
                 ))
               ) : (
                 <tr>
@@ -200,14 +217,16 @@ export default function Dashboard() {
             </tbody>
           </table>
         </div>
-
       </div>
     </Layout>
   );
 }
 
-const StatCard = ({ title, value, icon }) => (
-  <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 font-sans">
+const StatCard = ({ title, value, icon, isDark }) => (
+  <div
+    className={`p-6 rounded-xl shadow transition font-sans ${isDark ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"
+      }`}
+  >
     <div className="flex justify-between items-center">
       <p className="text-gray-500 text-sm uppercase tracking-wide">{title}</p>
       <span className="bg-indigo-100 text-indigo-600 p-3 rounded-full text-xl">
@@ -227,23 +246,23 @@ const ActionCard = ({ title, subtitle }) => (
   </div>
 );
 
-const OrderRow = ({ id, user, status, amount }) => {
+const OrderRow = ({ id, user, status, amount, isDark }) => {
   const statusColor =
     status === "Completed"
-      ? "text-green-500 font-medium"
+      ? "text-green-500"
       : status === "Pending"
-        ? "text-yellow-500 font-medium"
-        : "text-red-500 font-medium";
+        ? "text-yellow-500"
+        : "text-red-500";
 
   return (
-    <tr className="border-b hover:bg-gray-50 font-sans">
-      <td className="py-3 px-2 text-left">{id}</td>
-      <td className="py-3 px-2 text-left">{user}</td>
-      <td className={`py-3 px-2 text-left ${statusColor}`}>{status}</td>
-      <td className="py-3 px-2 text-left">{amount}</td>
+    <tr
+      className={`border-b transition ${isDark ? "hover:bg-gray-700" : "hover:bg-gray-50"
+        }`}
+    >
+      <td className="py-3">{id}</td>
+      <td className="py-3">{user}</td>
+      <td className={`py-3 font-medium ${statusColor}`}>{status}</td>
+      <td className="py-3">{amount}</td>
     </tr>
   );
 };
-
-
-
