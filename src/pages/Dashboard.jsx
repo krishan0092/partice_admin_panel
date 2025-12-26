@@ -59,59 +59,34 @@ export default function Dashboard() {
     }
   };
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-
-    setTimeout(() => {
-      setStats([
-        { title: "Total Users", value: 1200 + Math.floor(Math.random() * 200), icon: <FaUsers /> },
-        { title: "Revenue", value: 80000 + Math.floor(Math.random() * 10000), icon: <FaRupeeSign /> },
-        { title: "Orders", value: 300 + Math.floor(Math.random() * 50), icon: <FaShoppingCart /> },
-        { title: "Growth", value: 10 + Math.floor(Math.random() * 5), icon: <FaChartLine /> },
-      ]);
-
-      setOrders([
-        { id: "#1024", user: "Neha Sharma", status: "Completed", amount: "₹3,200" },
-        { id: "#1025", user: "Kunal Mehta", status: "Pending", amount: "₹1,500" },
-        { id: "#1026", user: "Arjun Patel", status: "Completed", amount: "₹2,800" },
-      ]);
-
-      setRefreshing(false);
-    }, 1000);
-  };
+  const handleRefresh = () => { setRefreshing(true); setTimeout(() => { setStats([{ title: "Total Users", value: 1200 + Math.floor(Math.random() * 200), icon: <FaUsers /> }, { title: "Revenue", value: 80000 + Math.floor(Math.random() * 10000), icon: <FaRupeeSign /> }, { title: "Orders", value: 300 + Math.floor(Math.random() * 50), icon: <FaShoppingCart /> }, { title: "Growth", value: 10 + Math.floor(Math.random() * 5), icon: <FaChartLine /> },]); setOrders([{ id: "#1024", user: "Neha Sharma", status: "Completed", amount: "₹3,200" }, { id: "#1025", user: "Kunal Mehta", status: "Pending", amount: "₹1,500" }, { id: "#1026", user: "Arjun Patel", status: "Completed", amount: "₹2,800" },]); setRefreshing(false); }, 1000); };
 
   const isDark = theme === "dark";
 
   return (
     <Layout>
       <div
-        className={`min-h-screen p-6 font-sans transition-colors ${isDark ? "bg-gray-900 text-gray-100" : "bg-gray-100 text-gray-800"
+        className={`min-h-screen p-4 sm:p-6 transition-colors ${isDark ? "bg-gray-900 text-gray-100" : "bg-gray-100 text-gray-800"
           }`}
       >
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-6 rounded-xl shadow">
+        <div className="mb-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 sm:px-6 py-5 rounded-xl">
             <div>
-              <h1 className="text-2xl md:text-3xl font-semibold tracking-wide">
-                Dashboard
-              </h1>
-              <p className="text-indigo-100 text-sm mt-1">
-                Welcome back, Krish
-              </p>
+              <h1 className="text-xl sm:text-3xl font-semibold">Dashboard</h1>
+              <p className="text-sm text-indigo-100">Welcome back, Krish</p>
             </div>
-
-            <div className="flex gap-3 mt-4 md:mt-0">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="bg-white text-indigo-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-indigo-50"
+                className="bg-white text-indigo-600 px-4 py-2 rounded-lg flex items-center justify-center gap-2"
               >
                 <FaSyncAlt className={refreshing ? "animate-spin" : ""} />
                 Refresh
               </button>
-
               <button
                 onClick={handleLogout}
-                className="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600"
+                className="bg-red-500 px-4 py-2 rounded-lg"
               >
                 Logout
               </button>
@@ -119,7 +94,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((item, index) => (
             <StatCard
               key={index}
@@ -137,7 +112,7 @@ export default function Dashboard() {
           ))}
         </div>
 
-        <div className="mt-10">
+        <div className="mt-8 overflow-x-auto">
           <DashboardChart
             title="Revenue Overview"
             subtitle="Monthly revenue growth"
@@ -148,38 +123,31 @@ export default function Dashboard() {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
           <ActionCard title="Add New User" subtitle="User" />
           <ActionCard title="View Orders" subtitle="Orders" />
           <ActionCard title="Generate Report" subtitle="Report" />
         </div>
 
         <div
-          className={`mt-10 p-6 rounded-xl shadow ${isDark ? "bg-gray-800" : "bg-white"
+          className={`mt-8 p-4 sm:p-6 rounded-xl ${isDark ? "bg-gray-800" : "bg-white"
             }`}
         >
-          <h2 className="text-lg font-semibold mb-4 tracking-wide">
-            Recent Orders
-          </h2>
+          <h2 className="text-lg font-semibold mb-4">Recent Orders</h2>
 
-          <div className="flex flex-col md:flex-row gap-4 mb-4">
+          <div className="flex flex-col sm:flex-row gap-3 mb-4">
             <input
               type="text"
               placeholder="Search by user..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className={`px-3 py-2 rounded-lg w-full md:w-1/3 outline-none ${isDark
-                  ? "bg-gray-700 border-gray-600 text-gray-100"
-                  : "bg-white border"
+              className={`px-3 py-2 rounded-lg w-full sm:w-1/2 ${isDark ? "bg-gray-700 text-white" : "bg-white border"
                 }`}
             />
-
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className={`px-3 py-2 rounded-lg w-full md:w-1/4 outline-none ${isDark
-                  ? "bg-gray-700 border-gray-600 text-gray-100"
-                  : "bg-white border"
+              className={`px-3 py-2 rounded-lg w-full sm:w-1/3 ${isDark ? "bg-gray-700 text-white" : "bg-white border"
                 }`}
             >
               <option value="All">All Status</option>
@@ -189,33 +157,26 @@ export default function Dashboard() {
             </select>
           </div>
 
-          <table className="w-full text-sm">
-            <thead>
-              <tr
-                className={`border-b ${isDark ? "text-gray-400" : "text-gray-500"
-                  }`}
-              >
-                <th className="py-3 text-left">Order ID</th>
-                <th className="text-left">User</th>
-                <th className="text-left">Status</th>
-                <th className="text-left">Amount</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {filteredOrders.length ? (
-                filteredOrders.map((order, index) => (
-                  <OrderRow key={index} {...order} isDark={isDark} />
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" className="text-center py-6 text-gray-500">
-                    No orders found
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead>
+                <tr
+                  className={`border-b ${isDark ? "text-gray-400" : "text-gray-500"
+                    }`}
+                >
+                  <th className="py-3 text-left">Order ID</th>
+                  <th className="text-left">User</th>
+                  <th className="text-left">Status</th>
+                  <th className="text-left">Amount</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredOrders.map((order, index) => (
+                  <OrderRow key={index} {...order} isDark={isDark} />
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </Layout>
@@ -224,24 +185,24 @@ export default function Dashboard() {
 
 const StatCard = ({ title, value, icon, isDark }) => (
   <div
-    className={`p-6 rounded-xl shadow transition font-sans ${isDark ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"
+    className={`p-4 rounded-xl ${isDark ? "bg-gray-800" : "bg-white"
       }`}
   >
     <div className="flex justify-between items-center">
-      <p className="text-gray-500 text-sm uppercase tracking-wide">{title}</p>
-      <span className="bg-indigo-100 text-indigo-600 p-3 rounded-full text-xl">
+      <p className="text-sm text-gray-500">{title}</p>
+      <span className="bg-indigo-100 text-indigo-600 p-3 rounded-full">
         {icon}
       </span>
     </div>
-    <h3 className="text-3xl font-semibold mt-4">{value}</h3>
+    <h3 className="text-2xl font-semibold mt-3">{value}</h3>
   </div>
 );
 
 const ActionCard = ({ title, subtitle }) => (
-  <div className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-6 rounded-xl shadow hover:scale-[1.03] transition cursor-pointer font-sans">
-    <h3 className="text-lg font-semibold tracking-wide">{title}</h3>
-    <p className="text-sm opacity-90 mt-2">
-      {`Manage your ${subtitle} activities quickly`}
+  <div className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-5 rounded-xl">
+    <h3 className="font-semibold">{title}</h3>
+    <p className="text-sm opacity-90 mt-1">
+      {`Manage your ${subtitle}`}
     </p>
   </div>
 );
@@ -256,13 +217,13 @@ const OrderRow = ({ id, user, status, amount, isDark }) => {
 
   return (
     <tr
-      className={`border-b transition ${isDark ? "hover:bg-gray-700" : "hover:bg-gray-50"
+      className={`border-b ${isDark ? "hover:bg-gray-700" : "hover:bg-gray-50"
         }`}
     >
       <td className="py-3">{id}</td>
-      <td className="py-3">{user}</td>
-      <td className={`py-3 font-medium ${statusColor}`}>{status}</td>
-      <td className="py-3">{amount}</td>
+      <td>{user}</td>
+      <td className={`font-medium ${statusColor}`}>{status}</td>
+      <td>{amount}</td>
     </tr>
   );
 };

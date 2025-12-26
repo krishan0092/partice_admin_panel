@@ -7,49 +7,41 @@ export default function AddUserModal({ onClose, onSave }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-const handleSubmit = () => {
-  if (!name.trim() && !email.trim()) {
-    alert("Please fill in Name and Email fields!");
-    return;
-  }
-  if (!name.trim()) {
-    alert("Please enter Name!");
-    return;
-  }
-  if (!email.trim()) {
-    alert("Please enter Email!");
-    return;
-  }
+  const handleSubmit = () => {
+    if (!name.trim() && !email.trim()) {
+      alert("Please fill in Name and Email fields!");
+      return;
+    }
+    if (!name.trim()) {
+      alert("Please enter Name!");
+      return;
+    }
+    if (!email.trim()) {
+      alert("Please enter Email!");
+      return;
+    }
+    onSave({ name, email });
+    alert("User added successfully!");
+  };
 
-  onSave({ name, email });
-  alert("User added successfully!");
-};
-
+  const inputClass = `border px-3 sm:px-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+    theme === "dark"
+      ? "bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400"
+      : "bg-white border-gray-300 text-gray-800"
+  }`;
 
   return (
     <ModalWrapper title="Add User" onClose={onClose}>
-      <div
-        className={`space-y-3 ${
-          theme === "dark" ? "text-gray-100" : "text-gray-800"
-        }`}
-      >
+      <div className="space-y-4">
         <input
-          className={`border px-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-            theme === "dark"
-              ? "bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400"
-              : "bg-white border-gray-300 text-gray-800"
-          }`}
+          className={inputClass}
           placeholder="Full Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
 
         <input
-          className={`border px-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-            theme === "dark"
-              ? "bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400"
-              : "bg-white border-gray-300 text-gray-800"
-          }`}
+          className={inputClass}
           placeholder="Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -57,7 +49,7 @@ const handleSubmit = () => {
 
         <button
           onClick={handleSubmit}
-          className="bg-indigo-600 text-white px-4 py-2 rounded-lg w-full hover:bg-indigo-700 transition"
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base hover:bg-indigo-700 transition"
         >
           Save User
         </button>
